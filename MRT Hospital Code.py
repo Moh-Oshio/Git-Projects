@@ -35,10 +35,16 @@ class Reception:
         except FileNotFoundError:
             pass
 
+        self.folder = "patients"
+
+        os.makedirs(self.folder, exist_ok=True)
+
     # Another class is created to generate ranodm patient numbers between 100 and 5000
     def num_gen(self):
         rand_num = str(randint(100, 5000))
+
         def_len = 6
+
         new_num = (((def_len - len(rand_num)) * '0') + rand_num)
 
         cards_num.append(new_num)
@@ -53,8 +59,11 @@ class Reception:
         file_no = cards_num[-1]
 
         name = input("Enter patient's name: \n\n").upper()
+
         sex = input("\nMale or Female? \n\n").title()
+
         dob = input("\nEnter date of birth in the format: dd/mm/yyyy \n\n")
+
         dob_date = datetime.strptime(dob, "%d/%m/%Y").date()
 
         today = date.today()
@@ -68,4 +77,57 @@ class Reception:
 
         phone_number = input("\nEnter phone number: \n\n")
 
-        file_path = os.
+        file_path = os.path.join(self.folder, f'{file_no}.txt')
+
+        with open(file_path, 'a') as file:
+            file.write(
+                f"--- PATIENT CARD CREATED ({datetime.now().strftime('%Y-%m-%d %H:%M:%S')})  ---\n")
+
+            file.write(f'File Number: {file_no}\n')
+
+            file.write(f'Name of Patient: {name}\n')
+
+            file.write(f'Sex: {sex}\n')
+
+            file.write(f'Age: {age}\n')
+
+            file.write(f'Address: {address}\n')
+
+            file.write(f'Phone: {phone_number}\n')
+
+    def check_patient_file(self, card_number):
+        file_path = os.path.join(self.folder, f"{card_number}.txt")
+
+        if os.path.exists(file_path):
+            print(f"\n---- Patient Record ({card_number}) ----\n")
+            with open(file_path, 'r') as file:
+                print(file.read())
+            print("------------------------\n")
+            return True
+        else:
+            print(f"\nPatient file does not exist.\n")
+            return False
+
+    def vital_signs(self, card_no):
+        file_path = os.path.join(self.folder, f"{card_no}.txt")
+
+        if not os.path.exists(file_path):
+            print("\nPatient file not found.")
+            return
+
+        print("\nEnter vital signs:\n")
+        temp = input("Temperature (°C): ")
+        bp = input("Blood Pressure (mmHg): ")
+        pulse = input("Pulse (bpm): ")
+
+        with open(file_path, 'a') as file:
+            file.write(
+                f"\n--- VITAL SIGNS ({datetime.now().strftime('%Y-%m-%d %H:%M:%S')}) ---\n")
+            file.write(f"Temperature: {temp}°C\n")
+            file.write(f"Blood Pressure: {bp}mmHg\n")
+            file.write(f"Pulse: {pulse} bpm\n")
+
+        print("\nVital signs recorded successfully!\n")
+
+    def all_records(self):
+        return cards_num
