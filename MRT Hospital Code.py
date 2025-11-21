@@ -10,5 +10,62 @@ from random import randint
 # The datetime module will be used to track the time a patient has started treament while in the hospital
 from datetime import datetime, date
 
+# The os module is also needed to rename folders and files.
+import os
+
 # This is a list to store all the card numbers of each patient. It will be trasversed from time to time.
 cards_num = []
+
+# Now, it's time to start defining classes.
+# Firstly, we have the Reception section. This is the first section the patient encounters upon entering the hospital.
+# - In the case of a new patient, the Reception is tasked with collecting contact info, age and other important information. The Recption is also expected to take the card to the doctor who then instructs the nurses what to do.
+# - In the case of an old patient, the patient submits their hospital card and the nurses get the hospital file of such patient and then hands the hospital file to the doctor who then calls the patient in for examination.
+
+
+class Reception:
+    def __init__(self):
+        # there should be a try - except block at this point to catch erroneous hospital numbers.
+        # This block checks if the provided card number is not in the folder. If it is but it is not in the folder, the number gets appended to the cards_num list. Else, it passes.
+        try:
+            with open('file_numbers.txt', 'r') as file:
+                for line in file:
+                    number = line.strip()
+                    if number and number not in cards_num:
+                        cards_num.append(number)
+        except FileNotFoundError:
+            pass
+
+    # Another class is created to generate ranodm patient numbers between 100 and 5000
+    def num_gen(self):
+        rand_num = str(randint(100, 5000))
+        def_len = 6
+        new_num = (((def_len - len(rand_num)) * '0') + rand_num)
+
+        cards_num.append(new_num)
+
+        with open('file_numbers.txt', 'a') as file:
+            file.write(f'{new_num}\n')
+
+        return new_num
+
+    # ANother class to create a card for a new patient. This card should contain the patient's details such as age, address, and phone number.
+    def create_card(self):
+        file_no = cards_num[-1]
+
+        name = input("Enter patient's name: \n\n").upper()
+        sex = input("\nMale or Female? \n\n").title()
+        dob = input("\nEnter date of birth in the format: dd/mm/yyyy \n\n")
+        dob_date = datetime.strptime(dob, "%d/%m/%Y").date()
+
+        today = date.today()
+
+        age = today.year - dob_date.year
+
+        if (today.month, today.day) < (dob_date.month, dob_date.day):
+            age -= 1
+
+        address = input("\nEnter address: \n\n")
+
+        phone_number = input("\nEnter phone number: \n\n")
+
+        file_path = os.
