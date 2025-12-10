@@ -145,4 +145,8 @@ class Doctor:
             print("\nPatient file not found")
             return
 
-        print
+        # If there is a patient card with the specified card number, the doctor's diagnosis, prescription and additional notes should be entered.
+        print("\nEnter doctor's report:\n")
+        diagnosis = input("Diagnosis: ")
+        prescription = input("Prescription: ")
+        notes = input("Additional Notes: ")
