@@ -150,3 +150,15 @@ class Doctor:
         diagnosis = input("Diagnosis: ")
         prescription = input("Prescription: ")
         notes = input("Additional Notes: ")
+
+        # Appends the doctor's diagnosis, prescription and additional notes to the patient's file
+        with open(file_path, 'a') as file:
+            file.write(
+                f"\n--DOCTOR'S REPORT ({datetime.now().strftime('%Y-%m-%d %H:%M:%S')}) -- \n")
+            file.write(f"Diagnosis: {diagnosis}\n")
+            file.write(f"Prescription: {prescription}\n")
+            file.write(f"Notes: {notes}\n")
+
+
+class Nurse:
+    folder = patients
