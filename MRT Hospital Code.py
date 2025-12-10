@@ -131,3 +131,18 @@ class Reception:
 
     def all_records(self):
         return cards_num
+
+
+class Doctor:
+
+    folder = patients
+
+    def enter_report(self, card_no):
+        file_path = os.path.join(self.folder, f"{card_no}.txt")
+
+        if not os.path.exists(file_path):
+            # checks for a patient card using the card no
+            print("\nPatient file not found")
+            return
+
+        print
